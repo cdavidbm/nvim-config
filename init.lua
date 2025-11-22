@@ -472,6 +472,39 @@ vim.opt.splitright = true
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- Mejorar el rendimiento de renderizado
+vim.opt.lazyredraw = false   -- No usar lazyredraw (puede causar problemas en WSL)
+vim.opt.ttyfast = true       -- Terminal rápida
+vim.opt.timeout = true
+vim.opt.timeoutlen = 300
+vim.opt.ttimeout = true
+vim.opt.ttimeoutlen = 10
+
+-- Reducir el tiempo de actualización
+vim.opt.updatetime = 100    -- Más rápido que 50
+
+-- Deshabilitar algunas características que pueden causar problemas
+vim.opt.cursorline = false  -- Desactivar línea del cursor (consume recursos)
+vim.opt.cursorcolumn = false
+vim.opt.synmaxcol = 240     -- Limitar el resaltado de sintaxis
+
+-- Para WSL específicamente
+if vim.fn.has('wsl') == 1 then
+  vim.opt.lazyredraw = false
+  vim.g.clipboard = {
+    name = 'WslClipboard',
+    copy = {
+      ['+'] = 'clip.exe',
+      ['*'] = 'clip.exe',
+    },
+    paste = {
+      ['+'] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+      ['*'] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+    },
+    cache_enabled = 0,
+  }
+end
+
 -- ============================================================================
 -- AUTO-COMANDOS
 -- ============================================================================
