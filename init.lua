@@ -30,10 +30,9 @@ require("lazy").setup({
   -- tema Moonlight
   {
     "shaunsingh/moonlight.nvim",
-    lazy = false,    -- Cargar inmediatamente
-    priority = 1000, -- Cargar antes que otros plugins
+    lazy = false,
+    priority = 1000,
     config = function()
-      -- Configuración opcional del tema
       vim.g.moonlight_italic_comments = true
       vim.g.moonlight_italic_keywords = true
       vim.g.moonlight_italic_functions = true
@@ -41,8 +40,6 @@ require("lazy").setup({
       vim.g.moonlight_contrast = true
       vim.g.moonlight_borders = false
       vim.g.moonlight_disable_background = false
-
-      -- Activar el tema
       vim.cmd("colorscheme moonlight")
     end,
   },
@@ -59,41 +56,34 @@ require("lazy").setup({
       vim.g.codeium_disable_bindings = 1
 
       -- Configuración de Codeium
-      vim.g.codeium_manual = false -- Activar sugerencias automáticas
-      vim.g.codeium_idle_delay = 75 -- Delay antes de mostrar sugerencias (ms)
+      vim.g.codeium_manual = false
+      vim.g.codeium_idle_delay = 75
 
       -- ATAJOS DE TECLADO PARA CODEIUM
-      -- Aceptar sugerencia completa
       vim.keymap.set('i', '<C-g>', function()
         return vim.fn['codeium#Accept']()
       end, { expr = true, silent = true, desc = "Codeium: Aceptar sugerencia" })
 
-      -- Aceptar palabra por palabra
       vim.keymap.set('i', '<C-Right>', function()
         return vim.fn['codeium#AcceptNextWord']()
       end, { expr = true, silent = true, desc = "Codeium: Aceptar siguiente palabra" })
 
-      -- Aceptar línea por línea
       vim.keymap.set('i', '<C-l>', function()
         return vim.fn['codeium#AcceptNextLine']()
       end, { expr = true, silent = true, desc = "Codeium: Aceptar línea" })
 
-      -- Siguiente sugerencia
       vim.keymap.set('i', '<M-]>', function()
         return vim.fn['codeium#CycleCompletions'](1)
       end, { expr = true, silent = true, desc = "Codeium: Siguiente sugerencia" })
 
-      -- Sugerencia anterior
       vim.keymap.set('i', '<M-[>', function()
         return vim.fn['codeium#CycleCompletions'](-1)
       end, { expr = true, silent = true, desc = "Codeium: Sugerencia anterior" })
 
-      -- Limpiar/Cancelar sugerencia actual
       vim.keymap.set('i', '<C-x>', function()
         return vim.fn['codeium#Clear']()
       end, { expr = true, silent = true, desc = "Codeium: Cancelar sugerencia" })
 
-      -- Activar/Desactivar Codeium manualmente
       vim.keymap.set('n', '<leader>ce', function()
         vim.fn['codeium#Enable']()
         print("Codeium habilitado")
@@ -104,22 +94,86 @@ require("lazy").setup({
         print("Codeium deshabilitado")
       end, { desc = "Codeium: Deshabilitar" })
 
-      -- Mostrar estado de Codeium
-      vim.keymap.set('n', '<leader>cs', function()
-        vim.fn['codeium#GetStatusString']()
-      end, { desc = "Codeium: Mostrar estado" })
-
-      -- Chat con Codeium (abre en navegador)
       vim.keymap.set('n', '<leader>cc', function()
         return vim.fn['codeium#Chat']()
       end, { expr = true, desc = "Codeium: Abrir chat" })
     end,
   },
 
+  -- Explorador de archivos
+  {
+    "nvim-tree/nvim-tree.lua",
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      vim.g.loaded_netrw = 1
+      vim.g.loaded_netrwPlugin = 1
+
+      require("nvim-tree").setup({
+        sort = {
+          sorter = "case_sensitive",
+        },
+        view = {
+          width = 30,
+          side = "left",
+        },
+        renderer = {
+          group_empty = true,
+          icons = {
+            glyphs = {
+              default = "",
+              symlink = "",
+              folder = {
+                arrow_closed = "",
+                arrow_open = "",
+                default = "",
+                open = "",
+                empty = "",
+                empty_open = "",
+                symlink = "",
+                symlink_open = "",
+              },
+              git = {
+                unstaged = "✗",
+                staged = "✓",
+                unmerged = "",
+                renamed = "➜",
+                untracked = "★",
+                deleted = "",
+                ignored = "◌",
+              },
+            },
+          },
+        },
+        filters = {
+          dotfiles = false,
+          git_ignored = false,
+          custom = { ".git", "node_modules", ".cache", "__pycache__" },
+        },
+        actions = {
+          open_file = {
+            quit_on_open = false,
+            window_picker = {
+              enable = false,
+            },
+          },
+        },
+        git = {
+          enable = true,
+          ignore = false,
+        },
+      })
+
+      vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>', { desc = 'Toggle file tree' })
+      vim.keymap.set('n', '<leader>e', ':NvimTreeFocus<CR>', { desc = 'Focus file tree' })
+      vim.keymap.set('n', '<leader>tf', ':NvimTreeFindFile<CR>', { desc = 'Find current file in tree' })
+    end,
+  },
+
   -- LSP (Language Server Protocol)
   {
     "neovim/nvim-lspconfig",
-    tag = "v0.1.8", -- Usar una versión estable específica
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
@@ -140,7 +194,7 @@ require("lazy").setup({
     },
   },
 
-  -- Auto-pairs (cierra automáticamente paréntesis, corchetes, etc.)
+  -- Auto-pairs
   {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
@@ -177,13 +231,13 @@ require("lazy").setup({
     end,
   },
 
-  -- Treesitter (mejor resaltado de sintaxis) - opcional pero recomendado
+  -- Treesitter
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     config = function()
       require("nvim-treesitter.configs").setup({
-        ensure_installed = { "python", "lua", "vim", "vimdoc" },
+        ensure_installed = { "python", "lua", "vim", "vimdoc", "javascript", "typescript", "html", "css" },
         sync_install = false,
         auto_install = true,
         highlight = {
@@ -196,7 +250,7 @@ require("lazy").setup({
     end,
   },
 
-  -- OPCIONAL: Barra de estado para ver el estado de Codeium
+  -- Barra de estado
   {
     "nvim-lualine/lualine.nvim",
     dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -207,7 +261,6 @@ require("lazy").setup({
         },
         sections = {
           lualine_x = {
-            -- Mostrar estado de Codeium en la barra
             {
               function()
                 local status = vim.fn['codeium#GetStatusString']()
@@ -249,7 +302,6 @@ require("mason-lspconfig").setup({
 local cmp = require("cmp")
 local luasnip = require("luasnip")
 
--- Cargar snippets de VSCode
 require("luasnip.loaders.from_vscode").lazy_load()
 
 cmp.setup({
@@ -268,7 +320,6 @@ cmp.setup({
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.abort(),
     ['<CR>'] = cmp.mapping.confirm({ select = true }),
-    -- Navegación con Tab y Shift-Tab
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
@@ -297,7 +348,6 @@ cmp.setup({
   }),
   formatting = {
     format = function(entry, vim_item)
-      -- Iconos para diferentes tipos de completado
       local kind_icons = {
         Text = "󰉿",
         Method = "󰆧",
@@ -331,7 +381,6 @@ cmp.setup({
   },
 })
 
--- Integración de autopairs con cmp
 local cmp_autopairs = require('nvim-autopairs.completion.cmp')
 cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
 
@@ -339,51 +388,45 @@ cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
 -- CONFIGURACIÓN DE LSP
 -- ============================================================================
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
+local lspconfig = require('lspconfig')
 
--- Función para configurar LSP sin advertencias
-local function setup_lsp()
-  local lspconfig = require('lspconfig')
+-- Configuración automática de servidores instalados por Mason
+require("mason-lspconfig").setup_handlers({
+  -- Handler por defecto
+  function(server_name)
+    lspconfig[server_name].setup({
+      capabilities = capabilities,
+    })
+  end,
 
-  -- Configurar Pyright
-  lspconfig.pyright.setup({
-    capabilities = capabilities,
-    settings = {
-      python = {
-        analysis = {
-          autoSearchPaths = true,
-          diagnosticMode = "workspace",
-          useLibraryCodeForTypes = true,
-          typeCheckingMode = "basic",
-          autoImportCompletions = true,
+  -- Configuración específica para pyright
+  ["pyright"] = function()
+    lspconfig.pyright.setup({
+      capabilities = capabilities,
+      settings = {
+        python = {
+          analysis = {
+            autoSearchPaths = true,
+            diagnosticMode = "workspace",
+            useLibraryCodeForTypes = true,
+            typeCheckingMode = "basic",
+            autoImportCompletions = true,
+          },
         },
       },
-    },
-  })
+    })
+  end,
 
-  -- Configurar Ruff
-  -- Intentar primero con 'ruff', si no existe usar 'ruff_lsp'
-  local ruff_config = {
-    capabilities = capabilities,
-    on_attach = function(client, bufnr)
-      -- Desabilitar hover para ruff (dejar que pyright lo maneje)
-      if client.name == 'ruff' or client.name == 'ruff_lsp' then
-        client.server_capabilities.hoverProvider = false
-      end
-    end,
-  }
-
-  -- Intentar configurar ruff o ruff_lsp
-  local ok = pcall(function() lspconfig.ruff.setup(ruff_config) end)
-  if not ok then
-    pcall(function() lspconfig.ruff_lsp.setup(ruff_config) end)
-  end
-end
-
--- Configurar LSP después de que los plugins se carguen
-vim.api.nvim_create_autocmd("User", {
-  pattern = "VeryLazy",
-  callback = function()
-    setup_lsp()
+  -- Configuración específica para ruff
+  ["ruff"] = function()
+    if lspconfig.ruff then
+      lspconfig.ruff.setup({
+        capabilities = capabilities,
+        on_attach = function(client)
+          client.server_capabilities.hoverProvider = false
+        end,
+      })
+    end
   end,
 })
 
@@ -394,19 +437,16 @@ vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(ev)
     local opts = { buffer = ev.buf }
-    -- Navegación
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
     vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
-    -- Workspace
     vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
     vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
     vim.keymap.set('n', '<space>wl', function()
       print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
     end, opts)
-    -- Acciones
     vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
     vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
@@ -417,7 +457,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
--- Atajos para diagnósticos
 vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
@@ -426,9 +465,13 @@ vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
 -- ============================================================================
 -- CONFIGURACIÓN GENERAL DE VIM
 -- ============================================================================
+-- Leader key
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
 -- Números de línea
 vim.opt.number = true
-vim.opt.relativenumber = true
+vim.opt.relativenumber = false  -- Números normales, no relativos
 
 -- Indentación
 vim.opt.tabstop = 4
@@ -456,7 +499,8 @@ vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
-vim.opt.updatetime = 50
+vim.opt.updatetime = 100
+vim.opt.timeoutlen = 300
 
 -- Portapapeles del sistema
 vim.opt.clipboard = "unnamedplus"
@@ -468,47 +512,9 @@ vim.opt.completeopt = "menuone,noselect"
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 
--- Configurar leader key
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
-
--- Mejorar el rendimiento de renderizado
-vim.opt.lazyredraw = false   -- No usar lazyredraw (puede causar problemas en WSL)
-vim.opt.ttyfast = true       -- Terminal rápida
-vim.opt.timeout = true
-vim.opt.timeoutlen = 300
-vim.opt.ttimeout = true
-vim.opt.ttimeoutlen = 10
-
--- Reducir el tiempo de actualización
-vim.opt.updatetime = 100    -- Más rápido que 50
-
--- Deshabilitar algunas características que pueden causar problemas
-vim.opt.cursorline = false  -- Desactivar línea del cursor (consume recursos)
-vim.opt.cursorcolumn = false
-vim.opt.synmaxcol = 240     -- Limitar el resaltado de sintaxis
-
--- Para WSL específicamente
-if vim.fn.has('wsl') == 1 then
-  vim.opt.lazyredraw = false
-  vim.g.clipboard = {
-    name = 'WslClipboard',
-    copy = {
-      ['+'] = 'clip.exe',
-      ['*'] = 'clip.exe',
-    },
-    paste = {
-      ['+'] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-      ['*'] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-    },
-    cache_enabled = 0,
-  }
-end
-
 -- ============================================================================
 -- AUTO-COMANDOS
 -- ============================================================================
--- Formatear Python con Ruff al guardar (opcional, comenta si no quieres)
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*.py",
   callback = function()
@@ -516,7 +522,6 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   end,
 })
 
--- Resaltar yanked text
 vim.api.nvim_create_autocmd("TextYankPost", {
   group = vim.api.nvim_create_augroup("YankHighlight", { clear = true }),
   callback = function()
@@ -524,7 +529,6 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
--- Configurar indentación específica para algunos tipos de archivo
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "javascript", "typescript", "html", "css", "json", "yaml" },
   callback = function()
@@ -548,7 +552,6 @@ vim.diagnostic.config({
   },
 })
 
--- Iconos para diagnósticos
 local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
 for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
@@ -556,12 +559,12 @@ for type, icon in pairs(signs) do
 end
 
 -- ============================================================================
--- MENSAJE DE AYUDA PARA CODEIUM
+-- MENSAJE DE AYUDA
 -- ============================================================================
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
     vim.defer_fn(function()
-      print("Codeium está listo! Usa :Codeium Auth para autenticarte (primera vez)")
+      print("Neovim listo! | Codeium: :Codeium Auth | Árbol: Ctrl+n")
     end, 100)
   end,
 })
