@@ -1,5 +1,3 @@
--- ~/.config/nvim/init.lua
-
 -- ============================================================================
 -- SILENCIAR ADVERTENCIAS DE DEPRECACIÓN
 -- ============================================================================
@@ -96,7 +94,7 @@ require("lazy").setup({
 
       vim.keymap.set('n', '<leader>cc', function()
         return vim.fn['codeium#Chat']()
-      end, { expr = true, desc = "Codeium: Abrir chat" })
+      end, { expr = true, desc = "Codeium: Abrir chat en navegador" })
     end,
   },
 
@@ -465,7 +463,7 @@ vim.g.maplocalleader = " "
 
 -- Números de línea
 vim.opt.number = true
-vim.opt.relativenumber = false  -- Números normales, no relativos
+vim.opt.relativenumber = true  -- Inicia con números relativos (cambia automáticamente)
 
 -- Indentación
 vim.opt.tabstop = 4
@@ -505,6 +503,33 @@ vim.opt.completeopt = "menuone,noselect"
 -- Split windows
 vim.opt.splitbelow = true
 vim.opt.splitright = true
+
+-- ============================================================================
+-- NUMERACIÓN AUTOMÁTICA (relativa en Normal, absoluta en Insert)
+-- ============================================================================
+local numbertoggle = vim.api.nvim_create_augroup("NumberToggle", { clear = true })
+
+-- Activar números relativos en modo Normal
+vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "InsertLeave", "WinEnter" }, {
+  group = numbertoggle,
+  callback = function()
+    if vim.wo.number then
+      vim.wo.relativenumber = true
+    end
+  end,
+  desc = "Activar números relativos en modo Normal",
+})
+
+-- Desactivar números relativos en modo Insert
+vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost", "InsertEnter", "WinLeave" }, {
+  group = numbertoggle,
+  callback = function()
+    if vim.wo.number then
+      vim.wo.relativenumber = false
+    end
+  end,
+  desc = "Desactivar números relativos en modo Insert",
+})
 
 -- ============================================================================
 -- AUTO-COMANDOS
@@ -558,7 +583,7 @@ end
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
     vim.defer_fn(function()
-      print("Neovim listo! | Codeium: :Codeium Auth | Árbol: Ctrl+n")
+      print("Neovim listo! | Codeium: :Codeium Auth | Árbol: Ctrl+n | Nums: relativos↔absolutos auto")
     end, 100)
   end,
 })
