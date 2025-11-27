@@ -200,7 +200,7 @@ require("lazy").setup({
       local mason_lspconfig = require("mason-lspconfig")
 
       mason_lspconfig.setup({
-        ensure_installed = { "pyright" },
+        ensure_installed = { "pyright", "emmet_ls" },
       })
 
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
@@ -219,6 +219,11 @@ require("lazy").setup({
             },
           },
         },
+      })
+
+      lspconfig.emmet_ls.setup({
+        capabilities = capabilities,
+        filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less" },
       })
 
       if vim.fn.executable('ruff') == 1 then
@@ -442,6 +447,15 @@ require("lazy").setup({
           },
         }
       })
+    end,
+  },
+ 
+  -- Emmet para HTML/CSS
+  {
+    "mattn/emmet-vim",
+    ft = { "html", "css", "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "php" },
+    config = function()
+      vim.g.user_emmet_leader_key = '<C-y>'
     end,
   },
 
