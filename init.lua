@@ -50,14 +50,10 @@ require("lazy").setup({
       "nvim-lua/plenary.nvim",
     },
     config = function()
-      -- Desactivar mapeos por defecto de Codeium
       vim.g.codeium_disable_bindings = 1
-
-      -- Configuración de Codeium
       vim.g.codeium_manual = false
       vim.g.codeium_idle_delay = 75
 
-      -- ATAJOS DE TECLADO PARA CODEIUM
       vim.keymap.set('i', '<C-g>', function()
         return vim.fn['codeium#Accept']()
       end, { expr = true, silent = true, desc = "Codeium: Aceptar sugerencia" })
@@ -207,11 +203,9 @@ require("lazy").setup({
         ensure_installed = { "pyright" },
       })
 
-      -- Configurar LSP después de que mason-lspconfig esté listo
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
       local lspconfig = require('lspconfig')
 
-      -- Configurar pyright
       lspconfig.pyright.setup({
         capabilities = capabilities,
         settings = {
@@ -227,7 +221,6 @@ require("lazy").setup({
         },
       })
 
-      -- Configurar ruff si está disponible
       if vim.fn.executable('ruff') == 1 then
         lspconfig.ruff.setup({
           capabilities = capabilities,
@@ -237,7 +230,6 @@ require("lazy").setup({
         })
       end
 
-      -- ATAJOS DE TECLADO PARA LSP
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('UserLspConfig', {}),
         callback = function(ev)
@@ -452,33 +444,34 @@ require("lazy").setup({
       })
     end,
   },
+
+}, {
+  -- OPCIONES DE LAZY.NVIM (segundo argumento)
+  rocks = {
+    enabled = false,
+  },
 })
 
 -- ============================================================================
 -- CONFIGURACIÓN GENERAL DE VIM
 -- ============================================================================
--- Leader key
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- Números de línea
 vim.opt.number = true
-vim.opt.relativenumber = true  -- Inicia con números relativos (cambia automáticamente)
+vim.opt.relativenumber = true
 
--- Indentación
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.autoindent = true
 vim.opt.smartindent = true
 
--- Búsqueda
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
 
--- Apariencia
 vim.opt.termguicolors = true
 vim.opt.signcolumn = "yes"
 vim.opt.cursorline = true
@@ -486,7 +479,6 @@ vim.opt.wrap = false
 vim.opt.scrolloff = 8
 vim.opt.sidescrolloff = 8
 
--- Comportamiento
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
@@ -494,13 +486,8 @@ vim.opt.undofile = true
 vim.opt.updatetime = 100
 vim.opt.timeoutlen = 300
 
--- Portapapeles del sistema
 vim.opt.clipboard = "unnamedplus"
-
--- Completado
 vim.opt.completeopt = "menuone,noselect"
-
--- Split windows
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 
@@ -509,7 +496,6 @@ vim.opt.splitright = true
 -- ============================================================================
 local numbertoggle = vim.api.nvim_create_augroup("NumberToggle", { clear = true })
 
--- Activar números relativos en modo Normal
 vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "InsertLeave", "WinEnter" }, {
   group = numbertoggle,
   callback = function()
@@ -520,7 +506,6 @@ vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "InsertLeave", "WinEnte
   desc = "Activar números relativos en modo Normal",
 })
 
--- Desactivar números relativos en modo Insert
 vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost", "InsertEnter", "WinLeave" }, {
   group = numbertoggle,
   callback = function()
