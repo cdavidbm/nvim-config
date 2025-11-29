@@ -42,6 +42,18 @@ require("lazy").setup({
     end,
   },
 
+
+    {
+  "christoomey/vim-tmux-navigator",
+  lazy = false,
+  keys = {
+    { "<C-h>", "<cmd>TmuxNavigateLeft<cr>", desc = "Navegar izquierda" },
+    { "<C-j>", "<cmd>TmuxNavigateDown<cr>", desc = "Navegar abajo" },
+    { "<C-k>", "<cmd>TmuxNavigateUp<cr>", desc = "Navegar arriba" },
+    { "<C-l>", "<cmd>TmuxNavigateRight<cr>", desc = "Navegar derecha" },
+  },
+},
+
   -- CODEIUM - Asistente de IA GRATIS
   {
     "Exafunction/codeium.vim",
