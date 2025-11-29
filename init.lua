@@ -94,6 +94,33 @@ require("lazy").setup({
     end,
   },
 
+  -- Plugin de SuperCollider
+  {
+    "davidgranstrom/scnvim",
+    ft = "supercollider",
+    config = function()
+      local scnvim = require("scnvim")
+      local map = scnvim.map
+      scnvim.setup({
+        keymaps = {
+          ["<C-e>"] = map("editor.send_block", {"n", "i"}),
+          ["<C-l>"] = map("editor.send_line", {"n", "i"}),
+          ["<C-k>"] = map("postwin.toggle", "n"),
+          ["<C-.>"] = map("sclang.hard_stop", {"n", "i"}),
+        },
+        postwin = {
+          float = {
+            enabled = true,
+                -- width = 60,
+                -- height = 40,
+                -- row = 2,    -- distancia desde arriba
+                -- col = 10,   -- distancia desde la izquierda
+          },
+        },
+      })
+    end,
+  },
+
   -- Explorador de archivos
   {
     "nvim-tree/nvim-tree.lua",
@@ -449,7 +476,7 @@ require("lazy").setup({
       })
     end,
   },
- 
+
   -- Emmet para HTML/CSS
   {
     "mattn/emmet-vim",
@@ -458,6 +485,17 @@ require("lazy").setup({
       vim.g.user_emmet_leader_key = '<C-y>'
     end,
   },
+
+  {
+  "chentoast/marks.nvim",
+  config = function()
+    require("marks").setup({
+      default_mappings = true,
+      signs = true,
+      mappings = {}
+    })
+  end,
+},
 
 }, {
   -- OPCIONES DE LAZY.NVIM (segundo argumento)
@@ -469,6 +507,12 @@ require("lazy").setup({
 -- ============================================================================
 -- CONFIGURACIÓN GENERAL DE VIM
 -- ============================================================================
+vim.opt.fillchars = { eob = " " } -- ocultar el simbolo ~
+
+-- Colores
+vim.api.nvim_set_hl(0, "MarkSignHL", { fg = "#ff9e64", bold = true })      -- marcas minúsculas
+vim.api.nvim_set_hl(0, "MarkSignNumHL", { fg = "#7aa2f7" })
+
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
