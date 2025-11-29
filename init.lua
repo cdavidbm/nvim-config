@@ -1,3 +1,7 @@
+-- linkear tmux.conf
+-- ln -s ~/.config/nvim/tmux.conf ~/.tmux.conf
+-- tmux source-file ~/.tmux.conf
+
 -- ============================================================================
 -- SILENCIAR ADVERTENCIAS DE DEPRECACIÓN
 -- ============================================================================
