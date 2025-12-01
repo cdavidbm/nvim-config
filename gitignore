@@ -1,0 +1,13 @@
+# Lazy plugin data
+lazy-lock.json
+
+# Archivos temporales
+*.swp
+*.bak
+
+# Directorios de plugins descargados
+/lazy
+/plugin
+
+# LSP servers instalados por Mason
+/mason
