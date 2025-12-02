@@ -10,7 +10,9 @@ opt.relativenumber = true
 opt.termguicolors = true
 opt.signcolumn = "yes"
 opt.cursorline = true
-opt.wrap = false
+opt.wrap = true
+opt.linebreak = true
+opt.showbreak = "↪ "
 opt.scrolloff = 8
 opt.sidescrolloff = 8
 opt.fillchars = { eob = " " }

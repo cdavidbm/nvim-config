@@ -56,12 +56,14 @@ autocmd("TextYankPost", {
 -- CONFIGURACIÓN POR TIPO DE ARCHIVO
 -- ============================================================================
 autocmd("FileType", {
-  pattern = { "javascript", "typescript", "html", "css", "json", "yaml", "lua" },
+  pattern = { "javascript", "typescript", "html", "css", "json", "yaml", "lua", "markdown", "txt"},
   callback = function()
     vim.opt_local.tabstop = 2
     vim.opt_local.shiftwidth = 2
+    vim.opt_local.wrap = true
+    vim.opt_local.linebreak = true
   end,
-  desc = "2 espacios para web/config files",
+  desc = "2 espacios para web/config files + wrap",
 })
 
 -- ============================================================================
