@@ -12,6 +12,9 @@ return {
       local map_expr = scnvim.map_expr
 
       scnvim.setup({
+        sclang = {
+          cmd = vim.fn.expand("~/.local/bin/sclang-pipewire"),
+        },
         keymaps = {
           ["<C-e>"] = map("editor.send_block", { "n", "i" }),
           ["<C-o>"] = map("editor.send_line", { "n", "i" }),
@@ -25,6 +28,10 @@ return {
         postwin = {
           float = {
             enabled = true,
+            width = 70,    -- ancho en columnas
+            height = 40,   -- altura en líneas
+            -- row = 0,       -- posición vertical
+            -- col = 0,       -- posición horizontal
           },
         },
         editor = {

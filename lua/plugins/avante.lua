@@ -34,10 +34,8 @@ return {
       },
     },
     opts = {
-      -- Proveedor de IA (opciones: "openai", "claude", "claude-code", "copilot", etc.)
+      -- Proveedor de IA (claude-code usa OAuth, ya autenticado)
       provider = "claude-code",
-      -- Puedes agregar más configuración aquí
-      -- api_key = os.getenv("ANTHROPIC_API_KEY"),
     },
   },
 

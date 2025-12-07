@@ -20,8 +20,16 @@ vim.opt.rtp:prepend(lazypath)
 -- ============================================================================
 require("lazy").setup({
   -- Importar configuraciones modulares
+  { import = "plugins.alpha" },
+  { import = "plugins.telescope" },
+  { import = "plugins.which-key" },
   { import = "plugins.ui" },
   { import = "plugins.editor" },
+  { import = "plugins.comment" },
+  { import = "plugins.toggleterm" },
+  { import = "plugins.gitsigns" },
+  { import = "plugins.surround" },
+  { import = "plugins.colorizer" },
   { import = "plugins.lsp" },
   { import = "plugins.cmp" },
   { import = "plugins.treesitter" },
