@@ -38,6 +38,7 @@ require("lazy").setup({
   { import = "plugins.scnvim" },
   { import = "plugins.smear_cursor" },
   { import = "plugins.neoscroll" },
+  { import = "plugins.lilypond" },
 }, {
   -- Opciones de lazy.nvim
   rocks = {
